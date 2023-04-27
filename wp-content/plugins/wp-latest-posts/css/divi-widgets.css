@@ -1,0 +1,55 @@
+.wplp-divi-container {
+    background: #fafafa;
+    text-align: center;
+}
+
+.wplp-divi-container .wplp-divi-placeholder {
+    background: url(../img/wplp-tmce-placeholder.svg) no-repeat scroll center center;
+    height: 200px;
+    border-radius: 2px;
+    width: 100%;
+    background-size: contain;
+}
+
+.wplp-divi-container .wplp-divi-message {
+    font-size: 13px;
+}
+
+.wplp-divi-container .wplp-loading-wrapper,
+.wplp-divi-container .wplp-loading {
+    margin: 0 auto;
+    width: 70px;
+    height: 70px;
+}
+
+.wplp-divi-select {
+    width: 100%;
+    display: block;
+    background: #f1f5f9;
+    border: 0;
+    border-radius: 3px;
+    padding: 7px 10px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: background .2s ease;
+    transition: background .2s ease;
+    color: #4c5866;
+    font-family: Open Sans,Helvetica,Roboto,Arial,sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: capitalize;
+    line-height: normal;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    letter-spacing: normal;
+}
+
+.wplp-divi-select option {
+    background: #fff;
+    text-transform: capitalize;
+}
+
+.wplp-divi-link-edit {
+    margin-top: 5px;
+    font-size: 13px;
+}

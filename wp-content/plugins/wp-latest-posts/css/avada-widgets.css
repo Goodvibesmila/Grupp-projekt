@@ -1,0 +1,38 @@
+.wplp-avada-container {
+    position: relative;
+    text-align: center;
+}
+
+.wplp-avada-container .wplp-avada-placeholder {
+    background: url(../img/wplp-tmce-placeholder.svg) no-repeat scroll center center;
+    height: 200px;
+    border-radius: 2px;
+    width: 100%;
+    background-size: contain;
+}
+
+.wplp-avada-container .wplp-avada-message {
+    font-size: 13px;
+}
+
+.fusion-builder-live .wplp_fusion .fusion-module-icon:before,
+.fusion-builder-all-modules .wplp_fusion .fusion-module-icon:before {
+    content: "";
+    display: block;
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 14px;
+
+}
+
+.fusion-builder-live .wplp-icon:before,
+.fusion-builder-all-modules .wplp-icon:before {
+    background-image: url(../img/wplp-icon-avada.svg);
+    background-size: cover;
+}
+
+.fusion-builder-live .wplp_fusion .fusion-module-icon:before {
+    width: 28px;
+    height: 28px;
+    margin: 0 auto;
+}
