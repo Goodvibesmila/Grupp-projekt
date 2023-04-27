@@ -1,0 +1,18 @@
+2023-04-25T12:58:30+00:00 CRITICAL Uncaught Error: Call to undefined function mime_content_type() in C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-content\plugins\ml-slider\admin\routes\api.php:982
+Stack trace:
+#0 C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-content\plugins\ml-slider\admin\routes\api.php(920): MetaSlider_Api->process_uploads(Array, NULL)
+#1 C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-includes\rest-api\class-wp-rest-server.php(1181): MetaSlider_Api->import_images(Object(WP_REST_Request))
+#2 C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-includes\rest-api\class-wp-rest-server.php(1028): WP_REST_Server->respond_to_request(Object(WP_REST_Request), '/metaslider/v1/...', Array, NULL)
+#3 C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-includes\rest-api\class-wp-rest-server.php(442): WP_REST_Server->dispatch(Object(WP_REST_Request))
+#4 C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-includes\rest-api.php(410): WP_REST_Server->serve_request('/metaslider/v1/...')
+#5 C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-includes\class-wp-hook.php(308): rest_api_loaded(Object(WP))
+#6 C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-includes\class-wp-hook.php(332): WP_Hook->apply_filters(NULL, Array)
+#7 C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-includes\plugin.php(565): WP_Hook->do_action(Array)
+#8 C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-includes\class-wp.php(399): do_action_ref_array('parse_request', Array)
+#9 C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-includes\class-wp.php(780): WP->parse_request('')
+#10 C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-includes\functions.php(1334): WP->main('')
+#11 C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-blog-header.php(16): wp()
+#12 C:\Users\Emilia\Desktop\PHP\grupp-projekt\index.php(17): require('C:\\Users\\Emilia...')
+#13 {main}
+  thrown in C:\Users\Emilia\Desktop\PHP\grupp-projekt\wp-content\plugins\ml-slider\admin\routes\api.php on line 982
+
