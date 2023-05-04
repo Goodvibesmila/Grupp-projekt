@@ -94,117 +94,92 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				 */
 				public function calculate_shipping( $package = array() ) {
 					
-					function get_cart_weight() {
-						global $woocommerce;
-						$cart_weight = 0;
-					
-						foreach ( $woocommerce->cart->get_cart() as $cart_item_key => $cart_item ) {
-							$product = $cart_item['data'];
-							$weight = floatval( $product->get_weight() );
-							$quantity = intval( $cart_item['quantity'] );
-					
-							$cart_weight += ( $weight * $quantity );
-						}
-					
-						return $cart_weight;
-					}
+				if ( ! function_exists( 'wpf_wc_add_cart_fees_by_cart_total_weight' ) ) {
+    				/**
+     				* wpf_wc_add_cart_fees_by_cart_total_weight.
+     				*/
+    				function wpf_wc_add_cart_fees_by_cart_total_weight( $cart ) {
+        				$weight = $cart->get_cart_contents_weight();
 
-					function calculate_shipping_cost( $weight ) {
-						$shipping_cost = 0;
-					
-						// Kolla om vikten är större än noll och lägg till en fraktkostnad beroende på viktintervallet
-						if ( $weight > 0 && $weight <= 10 ) {
-							$shipping_cost = 50;
-						} elseif ( $weight > 10 && $weight <= 30 ) {
-							$shipping_cost = 100;
-						} elseif ( $weight > 68 ) {
-							$shipping_cost = 150;
+						$name      = 'Weight fee';
+						$amount    = 0;
+        				
+						if ( $weight <= 30 ) {
+            				$amount    = 50;
+        				} elseif ($weight > 31) {
+							$amount    = 100;
 						}
-					
-						return $shipping_cost;
-					}
 
-					function add_shipping_cost_to_cart() {
-						$weight = get_cart_weight();
-						$shipping_cost = calculate_shipping_cost( $weight );
-					
-						// Lägg till fraktkostnaden till kundvagnen
-						if ( $shipping_cost > 0 ) {
-							WC()->cart->add_fee( 'Pris baserat på vikt', $shipping_cost );
-						}
-					}
+						$cart->add_fee( $name, $amount );
+    				}
+				}
 
-					function get_cart_shipping_classes() {
-						global $woocommerce;
-						$cart_shipping_classes = array();
-					
-						foreach ( $woocommerce->cart->get_cart() as $cart_item_key => $cart_item ) {
-							$product = $cart_item['data'];
-							$shipping_class = $product->get_shipping_class();
-							$quantity = intval( $cart_item['quantity'] );
-					
-							// Lägg till antalet produkter i varje fraktklass
-							if ( isset( $cart_shipping_classes[ $shipping_class ] ) ) {
-								$cart_shipping_classes[ $shipping_class ] += $quantity;
-							} else {
-								$cart_shipping_classes[ $shipping_class ] = $quantity;
+				
+
+				if ( ! function_exists( 'wpf_wc_add_cart_fees_by_shipping_class' ) ) {
+					function wpf_wc_add_cart_fees_by_shipping_class( $cart ) {
+						// Define the shipping classes and fees
+						$shipping_classes = array(
+							'test' => 10,
+							'test-1' => 20,
+							'test-2' => 30,
+						);
+				
+						// Loop through cart items to get shipping classes and quantities
+						$total_fees = array();
+						foreach( $cart->get_cart() as $cart_item ) {
+							$product_shipping_class = $cart_item['data']->get_shipping_class();
+							$product_quantity = $cart_item['quantity'];
+				
+							if ( array_key_exists( $product_shipping_class, $shipping_classes ) ) {
+								$shipping_class_fee = $shipping_classes[ $product_shipping_class ] * $product_quantity;
+								$total_fees[] = $shipping_class_fee;
 							}
 						}
-					
-						return $cart_shipping_classes;
-					}
-
-					function calculate_shipping_cost_classes( $shipping_classes ) {
-						$shipping_cost = 0;
-					
-						// Lägg till fraktkostnader för varje fraktklass
-						// För att lägga fraktklasser, hämta slug från inställningarna
-						foreach ( $shipping_classes as $shipping_class => $quantity ) {
-							if ( $shipping_class == 'test' ) {
-								$shipping_cost += 10 * $quantity;
-							} elseif ( $shipping_class == 'test-2' ) {
-								$shipping_cost += 30 * $quantity;
-								continue;
-							} elseif ( $shipping_class == 'test-3' ) {
-								$shipping_cost += 50 * $quantity;
-							}
-						}
-					
-						return $shipping_cost;
-					}
-
-					function add_shipping_cost_to_cart_classes() {
-						$shipping_classes = get_cart_shipping_classes();
-						$shipping_cost = calculate_shipping_cost_classes( $shipping_classes );
-					
-						// Lägg till fraktkostnaden till kundvagnen
-						if ( $shipping_cost > 0 ) {
-							WC()->cart->add_fee( 'Pris baserat på fraktklass', $shipping_cost );
+				
+						// Calculate the total fee for all shipping classes
+						$total_fee = array_sum( $total_fees );
+				
+						// Add the fee to the cart
+						if ( $total_fee > 0 ) {
+							$name = 'Shipping class fee';
+							$amount = $total_fee;
+							$cart->add_fee( $name, $amount );
 						}
 					}
+				}
+
+				if ( ! function_exists( 'wpf_wc_add_cart_fees_by_city' ) ) {
+    				/**
+     				* wpf_wc_add_cart_fees_by_city.
+     				*/
+					 
+    				function wpf_wc_add_cart_fees_by_city( $cart ) {
+        				$city = WC()->customer->get_shipping_city();
+
+						$name      = 'City fee';
+            			$amount    = 0;
+    
+        				if ( $city === 'Stockholm' ) {
+            				$amount    = 80;
+        				} elseif ($city === 'Göteborg') {
+							$amount    = 100;
+						} elseif ($city === 'Malmö') {
+							$amount    = 120;
+						} else {
+							$amount    = 200;
+						}
+
+						$cart->add_fee( $name, $amount );
+    				}
+				}
 
 					$chosen_shipping_method_id = WC()->session->get( 'chosen_shipping_methods' )[0];
     				$chosen_shipping_method = explode(':', $chosen_shipping_method_id)[0];
 					if($chosen_shipping_method == 'your_shipping_method') {
-						add_action( 'woocommerce_cart_calculate_fees', 'add_shipping_cost_to_cart' );
-						add_action( 'woocommerce_cart_calculate_fees', 'add_shipping_cost_to_cart_classes' );
-						add_action( 'woocommerce_cart_calculate_fees', 'add_custom_shipping_method_city' );
-					}
-	
-					function add_custom_shipping_method_city( $cart ) {
-						// Hämta kundvagnens stad
-						$city = WC()->customer->get_shipping_city();
-						
-						if ( $city === 'Stockholm') {
-							$shipping_cost = 100;
-							$cart->add_fee( 'Stockholm pris', $shipping_cost, true );
-						} elseif ( $city === 'Malmö' ) {
-							$shipping_cost = 150;
-							$cart->add_fee( 'Malmö pris', $shipping_cost, true );
-						} elseif ( $city === 'Göteborg' ) {
-							$shipping_cost = 120;
-							$cart->add_fee( 'Göteborg pris', $shipping_cost, true );
-						}
+						add_action( 'woocommerce_cart_calculate_fees', 'wpf_wc_add_cart_fees_by_cart_total_weight' );
+						add_action( 'woocommerce_cart_calculate_fees', 'wpf_wc_add_cart_fees_by_city' );
+						add_action( 'woocommerce_cart_calculate_fees', 'wpf_wc_add_cart_fees_by_shipping_class' );
 					}
 			
 					$rate = array(
